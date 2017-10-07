@@ -13,24 +13,24 @@ app.config['DEBUG'] = True
 
 gpsd = None #seting the global variable
 
-class GpsPoller(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
-        self.daemon = True
-        global gpsd #bring it in scope
-        gpsd = gps(mode=WATCH_ENABLE) #starting the stream of info
-        self.current_value = None
-        self.running = True #setting the thread running to true
+# class GpsPoller(threading.Thread):
+#     def __init__(self):
+#         threading.Thread.__init__(self)
+#         self.daemon = True
+#         global gpsd #bring it in scope
+gpsd = gps(mode=WATCH_ENABLE) #starting the stream of info
+#         self.current_value = None
+#         self.running = True #setting the thread running to true
+#
+#     def run(self):
+#         global gpsd
+#         while gpsp.running:
+#             print('looping');
+#             gpsd.next() #this will continue to loop and grab EACH set of gpsd info to clear the buffer
+#             #print(gpsd.fix.time)
 
-    def run(self):
-        global gpsd
-        while gpsp.running:
-            print('looping');
-            gpsd.next() #this will continue to loop and grab EACH set of gpsd info to clear the buffer
-            #print(gpsd.fix.time)
-
-gpsp = GpsPoller() # create the thread
-gpsp.start()
+# gpsp = GpsPoller() # create the thread
+# gpsp.start()
 
 @app.route('/')
 def hello_world():
@@ -43,8 +43,13 @@ def nanToZero(num):
 
 @app.route('/gps')
 def gps():
+    print('fetching')
     global gpsd
-    gpsd.next()
+    i = 0
+    while (i >= 0):
+        print('looping')
+        i = gpsd.next()
+        print(i)
     return jsonify({
         'latitude': nanToZero(gpsd.fix.latitude),
         'longitude': nanToZero(gpsd.fix.longitude),
