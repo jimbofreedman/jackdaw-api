@@ -43,13 +43,12 @@ def nanToZero(num):
 
 @app.route('/gps')
 def gps():
-    print('fetching')
     global gpsd
     i = 0
-    while (i >= 0):
-        print('looping')
-        i = gpsd.next()
-        print(i)
+    # while (i >= 0 or isinstance(i, dictwrapper)):
+    #     print('looping')
+    i = gpsd.next()
+    print(gpsd.fix.time)
     return jsonify({
         'latitude': nanToZero(gpsd.fix.latitude),
         'longitude': nanToZero(gpsd.fix.longitude),
